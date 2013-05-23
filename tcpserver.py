@@ -14,15 +14,17 @@ requestCommandAction = {
 	'close':handler.close		#本次请求结束，关闭连接
 }
 #address
-HOST = '127.0.0.1'
-PORT = 8000
+#HOST = '127.0.0.1'
+HOST = '121.199.24.119'
+PORT = 1234
 
 class VlogServer(ThreadingMixIn,TCPServer): pass
 
 class VlogHandler(BaseRequestHandler):
 	def handle(self):
 		data = self.request.recv(64)
-		requestCommandAction[data](self.request)
+		if data in requestCommandAction:
+			requestCommandAction[data](self.request)
 
 
 vlogServer = VlogServer((HOST,PORT),VlogHandler)

@@ -13,7 +13,7 @@ cur = conn.cursor()
 def friends(tcpconn):
 	'根用户id查询好友列表'
 	userid = tcpconn.recv(16)
-	cur.execute('select userfriend,friends_name where user = %s',userid)
+	cur.execute('select userfriend,friends_name from vl_friend where user = %s',userid)
 	res = cur.fetchall()
 	print res
 
