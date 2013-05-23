@@ -7,7 +7,7 @@ import socket
 import MySQLdb
 import MySQLdb.cursors
 
-conn = MySQLdb.connect(host='localhost',user='root',password='',db='vlog_v1',cursorclass=MySQLdb.cursors.DictCursor)
+conn = MySQLdb.connect(host='localhost',user='root',passwd='',db='vlog_v1',cursorclass=MySQLdb.cursors.DictCursor)
 cur = conn.cursor()
 #请求好友列表
 def friends(tcpconn):
@@ -17,5 +17,10 @@ def friends(tcpconn):
 	res = cur.fetchall()
 	print res
 
-
+def signin(connect):pass
+def offine(conn):pass
+def video(c):pass
+def videoinfo(c):pass
+def mailinfo(c):pass
+def close(c):pass
 

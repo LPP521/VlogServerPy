@@ -1,45 +1,30 @@
 #!/usr/bin/env python
 #_*_coding:utf-8_*_
 import socket
+from SocketServer import TCPServer,ThreadingMixIn,BaseRequestHandler
 import request_handler as handler
+
+requestCommandAction = {
+	'signin':handler.signin,	#用户登录
+	'friends':handler.friends,	#请求好友信息
+	'offine':handler.offine,	#下线
+	'video':handler.video,		#请求视频文件
+	'videoinfo':handler.videoinfo,	#请求视频附加信息
+	'mailinfo':handler.mailinfo,	#请求视频邮件的信息
+	'close':handler.close		#本次请求结束，关闭连接
+}
 #address
+HOST = '127.0.0.1'
 PORT = 8000
 
+class VlogServer(ThreadingMixIn,TCPServer): pass
 
-#configure socket
-s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-s.bind(("0.0.0.0",PORT))
+class VlogHandler(BaseRequestHandler):
+	def handle(self):
+		data = self.request.recv(64)
+		requestCommandAction[data](self.request)
 
-#passively wait
-s.listen(5)
-#accept and establish connection
-while True:
-	c,addr = s.accept()
-	print 'Got connection from',addr
-	request = ''
-	while True:
-		request = c.recv(16)
-		if request == 'signin':
-			#登录,TO DO
-			continue
-		elif request == 'friends':
-			#请求好友列表，doing
-			handler.friends(c)			
-		elif request == 'offine':
-			#下线，TO DO
-			continue
-		elif request == 'log':
-			#请求日志
-			continue
-		elif request == 'mail':
-			#请求邮件
-			continue
-		elif request == 'over':
-			#请求结束
-			break
-		else:
-			#不能识别请求信息
-			c.send('invalid')
-			break
-	
+
+vlogServer = VlogServer((HOST,PORT),VlogHandler)
+vlogServer.serve_forever()
 
