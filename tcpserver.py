@@ -12,9 +12,9 @@ requestCommandAction = {
 	'videoinfo':handler.videoinfo,	#请求视频附加信息
 	'mailinfo':handler.mailinfo,	#请求视频邮件的信息
 	'close':handler.close		#本次请求结束，关闭连接
+	'videodb':handler.insertVideoRecord	#插入一条视频日志记录
+	'UP':handler.recvFile				#接收来自客户端的一个文件传输
 }
-#address
-#HOST = '127.0.0.1'
 HOST = '121.199.24.119'
 PORT = 1234
 
