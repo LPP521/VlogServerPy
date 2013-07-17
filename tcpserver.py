@@ -13,6 +13,7 @@ requestCommandAction = {
 	'mailinfo':handler.mailinfo,	#请求视频邮件的信息
 	'close':handler.close,		#本次请求结束，关闭连接
 	'videodb':handler.insertVideoRecord,#插入一条视频日志记录
+	'sendmail':handler.insertMailRecord,#插入一条视频邮件记录
 	'UP':handler.recvFile				#接收来自客户端的一个文件传输
 }
 HOST = '121.199.24.119'

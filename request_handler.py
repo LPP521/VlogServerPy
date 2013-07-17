@@ -8,7 +8,7 @@ import MySQLdb
 import MySQLdb.cursors
 import struct
 
-conn = MySQLdb.connect(host='localhost',user='root',passwd='',db='vlog_v1',charset='utf8',cursorclass=MySQLdb.cursors.DictCursor)
+conn = MySQLdb.connect(host='localhost',user='',passwd='',db='vlog_v1',charset='utf8',cursorclass=MySQLdb.cursors.DictCursor)
 cur = conn.cursor()
 #请求好友列表
 def friends(tcpconn):
@@ -20,16 +20,14 @@ def friends(tcpconn):
 		buf = buf + item['userfriend'] + ',' + item['friends_name'] + ','
 	buf = buf[:-1]
 	buf = buf.encode('utf8')
-	print len(buf)
 	buf = struct.pack('B',len(buf))+buf
-	print repr(buf)
 	tcpconn.send(buf)
 
 
 #插入视频日志记录
 def insertVideoRecord(c):
 	buf = c.recv(1024)
-	print buf
+#	print buf
 	title,filename,author,explain =buf.split(',')  # c.recv(1024).split(',')
 	picture = filename[:-3] + 'jpg' #图片名称和视频名称就后缀名不一样
 	videourl = 'video/'+filename
@@ -46,6 +44,16 @@ def insertVideoRecord(c):
 	if isinstance(buf,unicode):
 		print '还是unicode编码'
 '''
+def insertMailRecord(c):
+	buf = c.recv(1024)
+#	print buf
+	sender,receiver,videoFilename,content = buf.split(',')
+	videoURL = 'video/' + videoFilename
+	cur.execute('insert into vl_mail(sender,receiver,send_time,mail_video,mail_content) VALUES(%s,%s,NOW(),%s,%s)',\
+				(sender,receiver,videoURL,content))
+	conn.commit()
+
+
 def recvFile(c):
 	fileType,filename = c.recv(24).split(',')
 	#根据文件类型觉定文件的保存路径
